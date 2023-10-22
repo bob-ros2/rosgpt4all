@@ -181,7 +181,7 @@ class GPTNode(Node):
 
     def token_handler(self, token):
         """Publishes to the generator and sentence publishers."""
-        SEGMENTATORS = ".:,;!?"
+        SEGMENTATORS = ".:,;!?-"
         if token == "EOF":
             if self.eof_indicator:
                 self.publish(self.sentence+self.eof_indicator, self.pub_sentence)
