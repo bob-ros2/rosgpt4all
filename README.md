@@ -136,7 +136,7 @@ GPT ouput. The whole message will be published when the generator has finished.
 GPT generator ouput. Each single token is published to the topic.
 
 > ~gpt_sentence (std_msgs/String)\
-GPT ouput aggregated as sentence. A message with content EOF indicates the end 
+GPT ouput aggregated as sentence or sub sentence. A message with content EOF indicates the end.
 of the generator output.
 
 ### Socket stream
@@ -203,7 +203,7 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
 
 > ~opacity\
   Type: double\
-  Window opacity. 1.0 = fully visible-\
+  Window opacity. 1.0 = fully visible.\
   Default: 1.0
 
 > ~stylesheet\
