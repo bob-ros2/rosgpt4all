@@ -216,6 +216,11 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   Title of window.\
   Default: GPT4ALL Terminal
 
+### Published Topics
+
+> ~gpt_in (std_msgs/String)\
+Publish to GPT4ALL input.
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.\
