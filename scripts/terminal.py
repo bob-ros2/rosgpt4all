@@ -17,6 +17,7 @@
 import os
 import sys
 import select
+import fcntl
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 import rclpy
@@ -96,10 +97,15 @@ class StdinThread(QtCore.QThread):
 
     def run(self):
         """Read stdin loop function."""
+        flags = fcntl.fcntl(sys.stdin.fileno(), fcntl.F_GETFL)
+        fcntl.fcntl(sys.stdin.fileno(), fcntl.F_SETFL, flags | os.O_NONBLOCK)
         while self.running:
             rlist, w, e = select.select([sys.stdin], [], [])
             if rlist:
-                buffer = sys.stdin.buffer.read(2).decode()
+                try:
+                    buffer = sys.stdin.buffer.read(128).decode()
+                except IOError:
+                    buffer = []
                 if len(buffer):
                     self.result.emit(buffer)
             else: self.sleep(0.1)
