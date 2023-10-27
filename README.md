@@ -1,12 +1,37 @@
 # ROS Package RosGPT4all
 
-This package contains ROS Nodes related to popular open source project [GPT4ALL](https://github.com/nomic-ai/gpt4all)
+This package contains [ROS](https://ros.org) Nodes related to the open source 
+project [GPT4ALL](https://github.com/nomic-ai/gpt4all).
 
 It integrates a GPT chat into the ROS framework. It enables to communicate via 
 topics or UNIX socket with a running GPT4ALL chat session.\
 Additionally a custom configurable terminal window ROS node is available to 
 enter chat messages and display the GPT response similar to the existing 
-GPT4ALL GUI.
+GPT4ALL GUI but with reduced features.\
+This package is not another GPT4all variant. It just make use of it and can be seen as a wrapper for ROS.
+
+Related links:
+- https://github.com/nomic-ai/gpt4all
+- https://ros.org
+
+## Index
+<!-- https://ecotrust-canada.github.io/markdown-toc/ -->
+- [ROS Package RosGPT4all](#ros-package-rosgpt4all)
+  * [Index](#index)
+  * [Dependencies](#dependencies)
+  * [Setup package](#setup-package)
+- [ROS Node GPT](#ros-node-gpt)
+  * [Usage](#usage)
+  * [Node Parameter](#node-parameter)
+  * [Subscribed Topics](#subscribed-topics)
+  * [Published Topics](#published-topics)
+  * [Socket stream](#socket-stream)
+- [ROS Node TERMINAL](#ros-node-terminal)
+  * [Dependencies](#dependencies-1)
+  * [Usage](#usage-1)
+  * [Node Parameter](#node-parameter-1)
+  * [Published Topics](#published-topics-1)
+- [Contributing](#contributing)
 
 ## Dependencies
 ```bash
@@ -14,7 +39,7 @@ GPT4ALL GUI.
 pip install gpt4all
 ```
 
-## Setup package ##
+## Setup package
 ```bash
 # run in your ros2_ws/src folder
 git clone https://gitlab.com/bob-ros2/rosgpt4all.git
@@ -25,6 +50,7 @@ colcon build
 
 # ROS Node GPT
 
+## Usage
 ```bash
 # run as server ROS node
 ros2 run rosgpt4all gpt.py
@@ -32,14 +58,10 @@ ros2 run rosgpt4all gpt.py
 # run with redirect produced output
 ros2 run rosgpt4all gpt.py --ros-args -r gpt_out:=/speak
 
-# send message to gpt4all
+# send message to gpt4all via command line
 ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
-
-# run the usual gpt4all GUI without ROS
-# use it to get new models
-<your-install-dir>/gpt4all/bin/chat
 ```
-### Node Parameter
+## Node Parameter
 
 > ~allow_download\
   Type: string\
@@ -122,12 +144,12 @@ ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
   probabilities add up to top_p.\
   Default: 0.4
 
-### Subscribed Topics
+## Subscribed Topics
 
 > ~gpt_in (std_msgs/String)\
 GPT input.
 
-### Published Topics
+## Published Topics
 
 > ~gpt_out (std_msgs/String)\
 GPT ouput. The whole message will be published when the generator has finished.
@@ -139,7 +161,7 @@ GPT generator ouput. Each single token is published to the topic.
 GPT ouput aggregated as sentence or sub sentence. A message with content EOF indicates the end.
 of the generator output.
 
-### Socket stream
+## Socket stream
 The GPT node also creates a socket where the generator output will be streamed 
 in realtime. Multiple clients can connect.
 ```bash
@@ -148,8 +170,7 @@ netcat -v -U /tmp/gpt.sock
 ```
 
 # ROS Node TERMINAL
-With this Ros Node the generator output of GPT4ALL node can be received and 
-displayed in realtime.
+With this Ros Node the generator output of GPT4ALL node can be received and displayed in realtime. This works as well with any other stdout stream. An input field can optionally be turned on which can be used to publish messages to a topic.
 
 ## Dependencies
 The required QT5 libraries should already exist if ROS is installed. If 
@@ -170,7 +191,7 @@ netcat -v -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p frame
 netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:=1 -p geometry:=[300,300,600,480]
 ```
 
-### Node Parameter
+## Node Parameter
 
 > ~display\
   Type: integer\
@@ -216,15 +237,12 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   Title of window.\
   Default: GPT4ALL Terminal
 
-### Published Topics
+## Published Topics
 
 > ~gpt_in (std_msgs/String)\
 Publish to GPT4ALL input.
 
-## Contributing
+# Contributing
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.\
 Please make sure to update tests as appropriate.
-
-## License
-[Apache2.0](https://www.apache.org/licenses/LICENSE-2.0)
