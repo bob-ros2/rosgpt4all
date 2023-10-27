@@ -33,6 +33,7 @@ class RosNode(Node):
         super().__init__('terminal')
 
         self.pub = self.create_publisher(String, 'gpt_in', 10)
+        self.sub = None
 
         self.declare_parameter('title', 'GPT4ALL Terminal', ParameterDescriptor(
             description='Title of window.'))
@@ -86,6 +87,10 @@ class RosNode(Node):
         msg.data = s
         self.pub.publish(msg)
 
+    def create_input_subscription(self, callback):
+        self.sub = self.create_subscription(
+            String, 'input', callback, 10)
+
 # stdin thread class
 
 class StdinThread(QtCore.QThread):
@@ -126,6 +131,7 @@ class Window(QWidget):
         self.worker.result.connect(self.update_text)
         self.oldPosition = QtCore.QPoint(0,0)
 
+        # setup main window
         self.setWindowTitle(self.node.title)
         self.setStyleSheet(self.node.stylesheet_window)
         self.setWindowOpacity(self.node.opacity)
@@ -172,7 +178,9 @@ class Window(QWidget):
             screen = QtGui.QGuiApplication.screens()[self.node.display]
             self.move(screen.geometry().x()+self.node.geometry[0], 
                       screen.geometry().y()+self.node.geometry[1],)
-        
+
+        self.node.create_input_subscription(self.input_callback)
+
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.spin_once)
         self.timer.start(100)
@@ -190,6 +198,10 @@ class Window(QWidget):
         self.tarea.moveCursor(QtGui.QTextCursor.End)
         self.tarea.insertPlainText(s)
         self.tarea.moveCursor(QtGui.QTextCursor.End)
+
+    def input_callback(self, msg : String):
+        """Receive input text via ROS topic."""
+        self.update_text(msg.data + "\n")
 
     def input_changed(self, text):
         """Input edit change text callback."""

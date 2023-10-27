@@ -24,6 +24,7 @@ from gpt4all import GPT4All
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
+from rcl_interfaces.msg import SetParametersResult
 from rcl_interfaces.msg import ParameterDescriptor
 #from roschat4all.action import GPT
 
@@ -36,7 +37,7 @@ class GPTNode(Node):
         self.socket = None
         self.socket_clients = []
         self.queue = []
-        
+
         self.declare_parameter('socket_path', '/tmp/gpt.sock', 
             ParameterDescriptor(description=
             'Unix socket where to write the output.'))
@@ -56,29 +57,32 @@ class GPTNode(Node):
         self.model_path = self.get_parameter(
             'model_path').get_parameter_value().string_value
 
+        self.declare_parameter('device', 'cpu', ParameterDescriptor(
+            description="The processing unit on which the GPT4All model will run. It can be set to:\n"
+                " cpu: Model will run on the central processing unit.\n"
+                " gpu: Model will run on the best available graphics processing unit, irrespective of its vendor.\n"
+                " amd, nvidia, intel: Model will run on the best available GPU from the specified vendor."))
+        self.device = self.get_parameter(
+            'device').get_parameter_value().string_value
+
         self.declare_parameter('prompt', '> %s\n\n', ParameterDescriptor(
             description='Promp format string to be used. E.g.: > %s\\n\\n'))
         self.prompt = self.get_parameter(
             'prompt').get_parameter_value().string_value
-        
+
         self.declare_parameter('allow_download', True, ParameterDescriptor(
             description='Allow dowloading model if it doesnt exist.'))
         self.allow_download = self.get_parameter(
             'allow_download').get_parameter_value().bool_value
         
-        self.declare_parameter('device', 'cpu', ParameterDescriptor(
-            description='Allow API to download models from gpt4all.io. Default is True.'))
-        self.device = self.get_parameter(
-            'device').get_parameter_value().string_value
-
-        self.declare_parameter('eof_indicator', 'EOF', ParameterDescriptor(
+        self.declare_parameter('eof_indicator', '', ParameterDescriptor(
             description='End of file indicator. It will be send when the '
             'generator task was done. (only gpt_generator and gpt_sentence '
             'topics). Leave blank if no EOF should be send.'))
         self.eof_indicator = self.get_parameter(
             'eof_indicator').get_parameter_value().string_value
 
-        # gpt4all=1.0.12 parameter 
+        # gpt4all=1.0.12 parameter generator
 
         self.declare_parameter('max_tokens', 200, 
             ParameterDescriptor(description=
@@ -122,9 +126,12 @@ class GPTNode(Node):
             'repeat_last_n').get_parameter_value().integer_value
         self.n_batch = self.get_parameter(
             'n_batch').get_parameter_value().integer_value
-        
-        # end gpt4all parameter
+        self.n_batch = self.get_parameter(
+            'n_batch').get_parameter_value().integer_value
+
+        # end gpt4all parameter generator
  
+        self.add_on_set_parameters_callback(self.parameter_callback)
         self.sub = self.create_subscription(String, 'gpt_in', 
             self.gpt_callback, 10)
         self.pub = self.create_publisher(String, 'gpt_out', 10)
@@ -148,6 +155,18 @@ class GPTNode(Node):
         self.running = False
         self.session_thread.join()
         self.sock_thread.join()
+
+    def parameter_callback(self, params):
+        for param in params:
+            if param.name == "max_tokens": self.max_tokens = param.value
+            elif param.name == "temp": self.temp = param.value
+            elif param.name == "top_k": self.top_k = param.value
+            elif param.name == "top_p": self.top_p = param.value
+            elif param.name == "repeat_penalty": self.repeat_penalty = param.value
+            elif param.name == "repeat_last_n": self.repeat_last_n = param.value
+            elif param.name == "n_batch": self.n_batch = param.value
+            elif param.name == "eof_indicator": self.eof_indicator = param.value
+        return SetParametersResult(successful=True)
 
     def gpt_callback(self, msg):
         """Pass incoming message to GPT4ALL."""

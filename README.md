@@ -30,6 +30,7 @@ Related links:
   * [Dependencies](#dependencies-1)
   * [Usage](#usage-1)
   * [Node Parameter](#node-parameter-1)
+  * [Subscribed Topics](#subscribed-topics-1)
   * [Published Topics](#published-topics-1)
 - [Contributing](#contributing)
 
@@ -170,7 +171,7 @@ netcat -v -U /tmp/gpt.sock
 ```
 
 # ROS Node TERMINAL
-With this Ros Node the generator output of GPT4ALL node can be received and displayed in realtime. This works as well with any other stdout stream. An input field can optionally be turned on which can be used to publish messages to a topic.
+With this Ros Node the generator output of GPT4ALL node can be received and displayed in realtime. This works as well with any other stdout stream. Also a topic input subscriber is available. An input field can optionally be turned on which can be used to publish messages to another topic.
 
 ## Dependencies
 The required QT5 libraries should already exist if ROS is installed. If 
@@ -236,6 +237,11 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   Type: string\
   Title of window.\
   Default: GPT4ALL Terminal
+
+## Subscribed Topics
+
+> ~input (std_msgs/String)\
+Read input data from topic  in addition to read data from stdin.
 
 ## Published Topics
 
