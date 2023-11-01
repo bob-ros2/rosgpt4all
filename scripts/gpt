@@ -158,7 +158,7 @@ class GPTNode(Node):
 
     def parameter_callback(self, params):
         for param in params:
-            if param.name == "max_tokens": self.max_tokens = param.value
+            if   param.name == "max_tokens": self.max_tokens = param.value
             elif param.name == "temp": self.temp = param.value
             elif param.name == "top_k": self.top_k = param.value
             elif param.name == "top_p": self.top_p = param.value
@@ -180,7 +180,9 @@ class GPTNode(Node):
                 if len(self.queue):
                     output = ''
                     text = self.queue.pop(0)
-                    self.print(self.prompt % text)
+                    prompt = self.prompt % text
+                    self.token_handler(prompt)
+                    self.print(prompt)
                     for token in self.model.generate(
                         text,
                         max_tokens = self.max_tokens,
@@ -194,13 +196,14 @@ class GPTNode(Node):
                         self.print(token)
                         self.token_handler(token)
                         output += token
-                    self.token_handler("EOF")
                     self.print("\n\n")
+                    self.token_handler("\n\n")
+                    self.token_handler("EOF")
                     self.publish(output, self.pub)
 
     def token_handler(self, token):
         """Publishes to the generator and sentence publishers."""
-        SEGMENTATORS = ".:,;!?-"
+        SEGMENTATORS = ".:,;!?-\n\t"
         if token == "EOF":
             if self.eof_indicator:
                 self.publish(self.sentence+self.eof_indicator, self.pub_sentence)

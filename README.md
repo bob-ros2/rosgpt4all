@@ -36,8 +36,16 @@ Related links:
 
 ## Dependencies
 ```bash
-# install 
+# install gpt4all
 pip install gpt4all
+
+# if using embedding
+pip install langchain
+# install chroma
+sudo apt install chroma
+# install chromadb
+pip install chromadb
+pip install unstructured
 ```
 
 ## Setup package
@@ -199,6 +207,11 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   Display number where to show the window. -1 = default display.\
   Default: -1
 
+> ~fontname\
+  Type: string\
+  Window fontname.\
+  Default: courier
+
 > ~fontsize\
   Type: integer\
   Window fontsize.\
@@ -238,10 +251,16 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   Title of window.\
   Default: GPT4ALL Terminal
 
+> ~line_count\
+  Type: string\
+  Maximum line count in the text area. 0 = unlimited.\
+  If the number exceeds the lines are removed from the top.
+  Default: 0
+
 ## Subscribed Topics
 
 > ~input (std_msgs/String)\
-Read input data from topic  in addition to read data from stdin.
+Read input data from topic in addition to be able to read data from stdin.
 
 ## Published Topics
 

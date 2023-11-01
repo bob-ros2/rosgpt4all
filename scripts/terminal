@@ -18,6 +18,7 @@ import os
 import sys
 import select
 import fcntl
+import signal
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 import rclpy
@@ -41,7 +42,9 @@ class RosNode(Node):
             description='Window opacity.'))
         self.declare_parameter('frameless', False, ParameterDescriptor(
             description='Switch off window caption.'))
-        self.declare_parameter('fontsize', 12, ParameterDescriptor(
+        self.declare_parameter('fontname', 'courier', ParameterDescriptor(
+            description='Window fontname.'))
+        self.declare_parameter('fontsize', 15, ParameterDescriptor(
             description='Window fontsize.'))
         self.declare_parameter('geometry', [0,0], ParameterDescriptor(
             description='Window geometry. [x, y, with, height]'))
@@ -59,6 +62,10 @@ class RosNode(Node):
             "background-color: black; color white;", 
             ParameterDescriptor(
             description='Stylesheet qss of Window area.'))
+        self.declare_parameter('line_count', 0, 
+            ParameterDescriptor(
+            description="Maximum line count in the text area. 0 = unlimited\n"
+            "If the number exceeds the lines are removed from the top."))
 
         self.title = self.get_parameter(
             'title').get_parameter_value().string_value
@@ -66,6 +73,8 @@ class RosNode(Node):
             'opacity').get_parameter_value().double_value
         self.frameless = self.get_parameter(
             'frameless').get_parameter_value().bool_value
+        self.fontname = self.get_parameter(
+            'fontname').get_parameter_value().string_value
         self.fontsize = self.get_parameter(
             'fontsize').get_parameter_value().integer_value
         self.geometry = self.get_parameter(
@@ -80,6 +89,8 @@ class RosNode(Node):
             'margin').get_parameter_value().integer_array_value
         self.input = self.get_parameter(
             'input').get_parameter_value().bool_value
+        self.line_count = self.get_parameter(
+            'line_count').get_parameter_value().integer_value
 
     def publish(self, s):
         """Publish message on topic."""
@@ -146,10 +157,14 @@ class Window(QWidget):
 
         # create plain text area
         self.tarea = QPlainTextEdit()
-        f = QtGui.QFont("monospace")
+        f = QtGui.QFont(self.node.fontname)
         f.setPointSize(self.node.fontsize)
         self.tarea.setFont(f)
         self.tarea.setStyleSheet(self.node.stylesheet)
+        self.tarea.setVerticalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        if self.node.line_count > 0:
+            self.tarea.setMaximumBlockCount(self.node.line_count)
 
         # create input text field
         self.text = ''
@@ -201,7 +216,7 @@ class Window(QWidget):
 
     def input_callback(self, msg : String):
         """Receive input text via ROS topic."""
-        self.update_text(msg.data + "\n")
+        self.update_text(msg.data)
 
     def input_changed(self, text):
         """Input edit change text callback."""
@@ -233,7 +248,11 @@ class Window(QWidget):
 
 # main
 
+def sigint_handler(*args):
+    QApplication.quit()
+
 def main():
+    signal.signal(signal.SIGINT, sigint_handler)
     app = QApplication(sys.argv)
     rclpy.init(args=sys.argv)
 
