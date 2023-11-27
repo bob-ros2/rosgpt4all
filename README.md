@@ -118,7 +118,7 @@ ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
 > ~prompt\
   Type: string\
   Promp format string to be used.\
-  Default: > %s\n\n
+  Default: > {0}\n\n
 
 > ~repeat_last_n\
   Type: integer\
