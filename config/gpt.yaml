@@ -1,0 +1,30 @@
+/gpt/gpt:
+  ros__parameters:
+    allow_download: true
+    device: cpu
+    eof_indicator: ''
+    max_tokens: 500
+    model_name: GPT4All-13B-snoozy.ggmlv3.q4_0
+    model_path: /home/ros/.local/share/nomic.ai/GPT4All
+    n_batch: 8
+    repeat_last_n: 64
+    repeat_penalty: 1.18
+    socket_path: /tmp/gpt.sock
+    temp: 0.7
+    top_k: 40
+    top_p: 0.4
+    prompt: "> {0}\n\n"
+
+/gpt/terminal:
+  ros__parameters:
+    title: GPT4ALL Terminal
+    display: -1
+    fontname: 'Monospace'
+    fontsize: 14
+    frameless: false
+    input: true
+    geometry: [800, 350, 800, 400]
+    margin: [10, 0, 0, 0]
+    opacity: 1.0
+    stylesheet: 'background-color: black; color: #e8e8e8;'
+    stylesheet_window: 'background-color: black; color white;'
