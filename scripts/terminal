@@ -34,7 +34,8 @@ class RosNode(Node):
         super().__init__('terminal')
 
         self.pub = self.create_publisher(String, 'gpt_in', 10)
-        self.sub = None
+        self.sub1 = None
+        self.sub2 = None
 
         self.declare_parameter('title', 'GPT4ALL Terminal', ParameterDescriptor(
             description='Title of window.'))
@@ -55,7 +56,7 @@ class RosNode(Node):
         self.declare_parameter('input', True, ParameterDescriptor(
             description='Enables or disables the text input field.'))
         self.declare_parameter('stylesheet', 
-            "background-color: #1c0a0a; color: #e9e9e9;", 
+            "background-color: black; color: #e9e9e9;", 
             ParameterDescriptor(
             description='Stylesheet qss of PlainText area.'))
         self.declare_parameter('stylesheet_window', 
@@ -98,9 +99,11 @@ class RosNode(Node):
         msg.data = s
         self.pub.publish(msg)
 
-    def create_input_subscription(self, callback):
-        self.sub = self.create_subscription(
+    def create_input_subscriptions(self, callback, callback_cr):
+        self.sub1 = self.create_subscription(
             String, 'input', callback, 10)
+        self.sub2 = self.create_subscription(
+            String, 'input_cr', callback_cr, 10)
 
 # stdin thread class
 
@@ -194,7 +197,7 @@ class Window(QWidget):
             self.move(screen.geometry().x()+self.node.geometry[0], 
                       screen.geometry().y()+self.node.geometry[1],)
 
-        self.node.create_input_subscription(self.input_callback)
+        self.node.create_input_subscriptions(self.input_callback, self.input_callback_cr)
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.spin_once)
@@ -215,8 +218,12 @@ class Window(QWidget):
         self.tarea.moveCursor(QtGui.QTextCursor.End)
 
     def input_callback(self, msg : String):
-        """Receive input text via ROS topic."""
+        """Receive input text via ROS topic and update text."""
         self.update_text(msg.data)
+
+    def input_callback_cr(self, msg : String):
+        """Receive input text via ROS topic and update text with CR"""
+        self.update_text(msg.data+"\n")
 
     def input_changed(self, text):
         """Input edit change text callback."""
