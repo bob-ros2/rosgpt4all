@@ -36,6 +36,7 @@ ament_export_dependencies(rosidl_default_runtime)
 install(PROGRAMS
   scripts/gpt
   scripts/terminal
+  scripts/terminal_cli
   DESTINATION lib/${PROJECT_NAME}
 )
 
