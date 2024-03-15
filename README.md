@@ -40,7 +40,10 @@ Related links:
 pip install gpt4all
 
 # if using embedding
-pip install langchain
+
+# use Qdrant
+pip install 'qdrant-client[fastembed]'
+# or Chroma DB
 # install chroma
 sudo apt install chroma
 # install chromadb
@@ -266,6 +269,29 @@ Read input data from topic in addition to be able to read data from stdin.
 
 > ~gpt_in (std_msgs/String)\
 Publish to GPT4ALL input.
+
+# ROS Node TERMINAL_CLI
+
+# ROS Node EMBEDDER
+
+## Usage
+```bash
+# run as server ROS node
+ros2 run rosgpt4all gpt.py
+
+# run with redirect produced output
+ros2 run rosgpt4all gpt.py --ros-args -r gpt_out:=/speak
+
+# send message to gpt4all via command line
+ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
+```
+## Node Parameter
+
+> ~allow_download\
+  Type: string\
+  Allow API to download models from gpt4all.io.\
+  Default: true
+
 
 # Contributing
 Pull requests are welcome. For major changes, please open an issue first

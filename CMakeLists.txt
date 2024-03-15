@@ -37,6 +37,10 @@ install(PROGRAMS
   scripts/gpt
   scripts/terminal
   scripts/terminal_cli
+  scripts/json_embedder.py
+  scripts/qdrant_embedder.py
+  scripts/chroma_embedder.py
+  scripts/embedder
   DESTINATION lib/${PROJECT_NAME}
 )
 

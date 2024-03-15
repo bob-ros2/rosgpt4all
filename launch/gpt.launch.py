@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import RegisterEventHandler
@@ -24,16 +25,20 @@ from launch.event_handlers import OnProcessStart
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch.conditions import IfCondition
+from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
     # use gpt config file if provided
     launch_config_yaml = DeclareLaunchArgument('config_yaml', 
-        default_value=TextSubstitution(text=''))
+        default_value=TextSubstitution(
+            text=os.path.join(
+                get_package_share_directory("rosgpt4all"),
+                "config", "gpt.yaml")))
 
     # used namespace for the nodes
     launch_ns = DeclareLaunchArgument('ns', 
-        default_value=TextSubstitution(text='/'))
+        default_value=TextSubstitution(text='/gpt'))
 
     # respawn node if exiting abnormal
     launch_respawn = DeclareLaunchArgument('respawn', 
