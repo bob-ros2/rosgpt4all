@@ -32,7 +32,7 @@ class EmbedderNode(Node):
     To embed into a Chroma DB set the environment variable EMBED_CHROMADB, it's enough if it just exists.
     See ROS parameter for further configuration.
     The JSON data has to contain the following fields. (for Qdrant the ids are optional) 
-    {"collection":"xyz", "documents":["hey ya","jo do"], "metadatas": [{"name":"works"}, {"name":"nut"}], "ids":[id1,id2]}
+    {"collection":"xyz", "documents":["hey ya","jo do"], "metadatas": [{"name":"works"}, {"name":"nut"}], "ids":['id1','id2']}
     """
 
     def __init__(self):
