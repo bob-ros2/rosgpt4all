@@ -38,6 +38,9 @@ class EmbedderNode(Node):
     def __init__(self):
         super().__init__('embedder')
         logging.basicConfig(
+            level = (logging.DEBUG
+                if self.get_logger().get_effective_level() == LoggingSeverity.DEBUG \
+                else logging.INFO),
             format="[%(levelname)s] [%(asctime)s.] [%(name)s]: %(message)s",
             datefmt="%s")
 

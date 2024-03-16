@@ -321,6 +321,9 @@ ros2 run rosgpt4all embed
 
 # start embedder node using Chroma Vector DB running on localhost
 EMBED_CHROMADB= ros2 run rosgpt4all embedder
+
+# run in debug mode, this will also set Python logging to level DEBUG
+ros2 run rosgpt4all embed --ros-args --log-level DEBUG
 ```
 
 ## Node Parameter
