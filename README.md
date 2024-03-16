@@ -36,6 +36,7 @@ Related links:
 - [ROS Node EMBEDDER](#ros-node-embedder)
   * [Embedding data format](#embedding-data-format)
   * [Usage](#usage-2)
+  * [Node Parameter](#node-parameter-2)
   * [Subscribed Topics](#subscribed-topics-2)
 - [Contributing](#contributing)
 
@@ -321,6 +322,8 @@ ros2 run rosgpt4all embed
 # start embedder node using Chroma Vector DB running on localhost
 EMBED_CHROMADB= ros2 run rosgpt4all embedder
 ```
+
+## Node Parameter
 
 > ~model\
   Modelname to be used to produce the embedding.
