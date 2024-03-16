@@ -327,7 +327,7 @@ EMBED_CHROMADB= ros2 run rosgpt4all embedder
 
 > ~model\
   Modelname to be used to produce the embedding.
-  it will be downloaded if it does not yet exists locally.\
+  It will be downloaded if it does not yet exists locally.\
   Default: ''
 
 > ~host\
@@ -336,7 +336,7 @@ EMBED_CHROMADB= ros2 run rosgpt4all embedder
 
 > ~port:\
   To be used port for the Vector DB API.\
-  Default: (depends on used Vector DB)
+  Default: (6333 or 8000, this depends on used Vector DB)
 
 > ~location\
   Location of Vector DB. Can also be an URL. 
