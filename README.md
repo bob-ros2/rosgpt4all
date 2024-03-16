@@ -59,6 +59,7 @@ pip install unstructured
 
 ## Setup package
 ```bash
+# for the following commands to work, an installed ROS2 distribution is required
 # run in your ros2_ws/src folder
 git clone https://gitlab.com/bob-ros2/rosgpt4all.git
 cd ..
@@ -308,10 +309,10 @@ following fields. (for Qdrant the ids are optional)
 
 ```json
 {
-  "collection":"xyz", 
-  "documents":["hey ya","jo do"], 
+  "collection": "xyz", 
+  "documents": ["hey ya","jo do"], 
   "metadatas": [{"name":"works"}, {"name":"nut"}], 
-  "ids":["id1","id2"]
+  "ids": ["id1","id2"]
 }
 ```
 
