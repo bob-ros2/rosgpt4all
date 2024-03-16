@@ -291,15 +291,15 @@ Related Qdrant links:
 - https://github.com/qdrant/fastembed
 - https://qdrant.tech/documentation/embeddings/nomic/
 
-By default, Qdrant uses `nomic-ai/nomic-embed-text-v1` model to 
-create embeddings.
+By default model `nomic-ai/nomic-embed-text-v1` will be used to create 
+embeddings for Qdrant.
 
 Related Chroma links:
 - https://www.trychroma.com/
 - https://docs.trychroma.com/
 
-By default, Chroma uses the Sentence Transformers `all-MiniLM-L6-v2` model to 
-create embeddings.
+By default Sentence Transformers `all-MiniLM-L6-v2` model will be use to 
+create embeddings for Chroma.
 
 ## Embedding data format
 
