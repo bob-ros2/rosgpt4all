@@ -36,7 +36,6 @@ ament_export_dependencies(rosidl_default_runtime)
 install(PROGRAMS
   scripts/gpt
   scripts/terminal
-  scripts/terminal_cli
   scripts/json_embedder.py
   scripts/qdrant_embedder.py
   scripts/chroma_embedder.py
