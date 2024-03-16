@@ -15,6 +15,7 @@ Related links:
 - https://ros.org
 
 ## Index
+
 <!-- https://ecotrust-canada.github.io/markdown-toc/ -->
 - [ROS Package RosGPT4all](#ros-package-rosgpt4all)
   * [Index](#index)
@@ -32,6 +33,10 @@ Related links:
   * [Node Parameter](#node-parameter-1)
   * [Subscribed Topics](#subscribed-topics-1)
   * [Published Topics](#published-topics-1)
+- [ROS Node EMBEDDER](#ros-node-embedder)
+  * [Embedding data format](#embedding-data-format)
+  * [Usage](#usage-2)
+  * [Subscribed Topics](#subscribed-topics-2)
 - [Contributing](#contributing)
 
 ## Dependencies
@@ -270,28 +275,71 @@ Read input data from topic in addition to be able to read data from stdin.
 > ~gpt_in (std_msgs/String)\
 Publish to GPT4ALL input.
 
-# ROS Node TERMINAL_CLI
-
 # ROS Node EMBEDDER
+
+Basic Embedder ROS Node.
+This ROS node subscribes to an /embed String topic to receive JSON data with 
+embedding messages. It embeds the delivered data into the configured Vector DB. 
+A Qdrant Vector DB is the default DB.
+To embed into a Chroma DB set the environment variable EMBED_CHROMADB, it's 
+enough if it just exists. See ROS parameter for further configuration.
+
+
+Related Qdrant links:
+- https://qdrant.tech/
+- https://github.com/qdrant/fastembed
+- https://qdrant.tech/documentation/embeddings/nomic/
+
+Related Chroma links:
+- https://www.trychroma.com/
+- https://docs.trychroma.com/
+
+By default, Chroma uses the Sentence Transformers `all-MiniLM-L6-v2` model to create embeddings.
+
+## Embedding data format
+
+The JSON data which is received by the String topic has to contain the following fields. 
+(for Qdrant the ids are optional) 
+
+```json
+{
+  "collection":"xyz", 
+  "documents":["hey ya","jo do"], 
+  "metadatas": [{"name":"works"}, {"name":"nut"}], 
+  "ids":["id1","id2"]
+}
+```
 
 ## Usage
 ```bash
-# run as server ROS node
-ros2 run rosgpt4all gpt.py
-
-# run with redirect produced output
-ros2 run rosgpt4all gpt.py --ros-args -r gpt_out:=/speak
-
-# send message to gpt4all via command line
-ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
+ros2 run rosgpt4all embed
 ```
-## Node Parameter
 
-> ~allow_download\
-  Type: string\
-  Allow API to download models from gpt4all.io.\
-  Default: true
+> ~model\
+  Modelname to be used to produce the embedding.
+  it will be downloaded if it does not yet exists locally.
 
+> ~host\
+  Host name or ip.
+  Default: 'localhost'
+
+> ~port: 
+  To be used port for the Vector DB API.
+  Default: (depends on used Vector DB)
+
+> ~location\
+  Location of Vector DB. Can also be an URL. 
+  Depend on the used undelying DB vendor.
+  Default: ''
+
+> ~path\
+  Path where to store the Vector DB data.
+  Default: ''
+
+## Subscribed Topics
+
+> ~embed (std_msgs/String)\
+Incoming JSON string with the embedding data.
 
 # Contributing
 Pull requests are welcome. For major changes, please open an issue first

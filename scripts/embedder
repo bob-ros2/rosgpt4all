@@ -29,7 +29,7 @@ class EmbedderNode(Node):
     This ROS node subscribes to an /embed String topic to receive JSON data with embedding messages.
     It embeds the delivered data into the configured Vector DB.
     A Qdrant Vector DB is the default DB.
-    To embed into a Chroma DB set the environment variable EMBED_CHROMADB to some value other then empty.
+    To embed into a Chroma DB set the environment variable EMBED_CHROMADB, it's enough if it just exists.
     See ROS parameter for further configuration.
     The JSON data has to contain the following fields. (for Qdrant the ids are optional) 
     {"collection":"xyz", "documents":["hey ya","jo do"], "metadatas": [{"name":"works"}, {"name":"nut"}], "ids":[id1,id2]}
@@ -73,7 +73,7 @@ class EmbedderNode(Node):
         self.location = self.get_parameter(
             'location').get_parameter_value().string_value
 
-        if os.getenv('EMBED_CHROMADB'):
+        if os.getenv('EMBED_CHROMADB', None) != None:
             self.embed = self.init_chroma()
         else:
             self.embed = self.init_qdrant()
