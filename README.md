@@ -294,12 +294,13 @@ Related Chroma links:
 - https://www.trychroma.com/
 - https://docs.trychroma.com/
 
-By default, Chroma uses the Sentence Transformers `all-MiniLM-L6-v2` model to create embeddings.
+By default, Chroma uses the Sentence Transformers `all-MiniLM-L6-v2` model to 
+create embeddings.
 
 ## Embedding data format
 
-The JSON data which is received by the String topic has to contain the following fields. 
-(for Qdrant the ids are optional) 
+The JSON data which is received by the String topic has to contain the 
+following fields. (for Qdrant the ids are optional) 
 
 ```json
 {
@@ -312,8 +313,13 @@ The JSON data which is received by the String topic has to contain the following
 
 ## Usage
 ```bash
+# in order to work below examples expects a running Qdrant or Chroma Vector DB
 
+# start embedder node, default to using Qdrant Vector DB
 ros2 run rosgpt4all embed
+
+# start embedder node using Chroma Vector DB
+EMBED_CHROMADB= ros2 run rosgpt4all embedder
 ```
 
 > ~model\
