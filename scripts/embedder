@@ -46,11 +46,13 @@ class EmbedderNode(Node):
             ParameterDescriptor(description=
             'To be used embedding model.'))
         self.declare_parameter(
-            'host', '192.168.1.134', 
+            'host', 'localhost', 
             ParameterDescriptor(description=
             'Vector DB host name or ip address.'))
         self.declare_parameter(
-            'port', 6333, 
+            'port', (8000
+                if os.getenv('EMBED_CHROMADB',None) != None 
+                else 6333), 
             ParameterDescriptor(description=
             'Vector DB port.'))
         self.declare_parameter(
