@@ -32,7 +32,7 @@ class GPT4AllEmbeddingFunction(chromadb.EmbeddingFunction):
 class ChromaEmbedder(json_embedder.JsonEmbedder):
     """Chroma JSON embedding interface.
     The __call__ function expects a string with a JSON dict containing the following attributes:
-      collection: to be use collection name
+      collection: to be used collection name
       documents: list with document strings
       metadatas: list of metadata dictionaries
       ids: list of id strings

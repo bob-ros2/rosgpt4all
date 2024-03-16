@@ -22,7 +22,7 @@ from typing import Any
 class QdrantEmbedder(json_embedder.JsonEmbedder):
     """Qdrant JSON embedding interface.
     The __call__ function expects a string with a JSON dict containing the following attributes:
-      collection: to be use collection name
+      collection: to be used collection name
       documents: list with document strings
       metadatas: list of metadata dictionaries
       ids: optional list of id strings, if not provided Qdrant will create them
