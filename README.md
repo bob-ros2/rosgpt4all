@@ -312,28 +312,30 @@ The JSON data which is received by the String topic has to contain the following
 
 ## Usage
 ```bash
+
 ros2 run rosgpt4all embed
 ```
 
 > ~model\
   Modelname to be used to produce the embedding.
-  it will be downloaded if it does not yet exists locally.
+  it will be downloaded if it does not yet exists locally.\
+  Default: ''
 
 > ~host\
-  Host name or ip.
+  Host name or ip.\
   Default: 'localhost'
 
-> ~port: 
-  To be used port for the Vector DB API.
+> ~port:\
+  To be used port for the Vector DB API.\
   Default: (depends on used Vector DB)
 
 > ~location\
   Location of Vector DB. Can also be an URL. 
-  Depend on the used undelying DB vendor.
+  Depend on the used undelying DB vendor.\
   Default: ''
 
 > ~path\
-  Path where to store the Vector DB data.
+  Path where to store the Vector DB data.\
   Default: ''
 
 ## Subscribed Topics
