@@ -334,13 +334,13 @@ EMBED_CHROMADB= ros2 run rosgpt4all embedder
   Host name or ip.\
   Default: 'localhost'
 
-> ~port:\
+> ~port\
   To be used port for the Vector DB API.\
-  Default: (6333 or 8000, this depends on used Vector DB)
+  Default: (6333 or 8000, this depends from used Vector DB)
 
 > ~location\
   Location of Vector DB. Can also be an URL. 
-  Depend on the used undelying DB vendor.\
+  This parameter is only used by Qdrant.\
   Default: ''
 
 > ~path\
