@@ -291,6 +291,9 @@ Related Qdrant links:
 - https://github.com/qdrant/fastembed
 - https://qdrant.tech/documentation/embeddings/nomic/
 
+By default, Qdrant uses `nomic-ai/nomic-embed-text-v1` model to 
+create embeddings.
+
 Related Chroma links:
 - https://www.trychroma.com/
 - https://docs.trychroma.com/
