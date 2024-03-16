@@ -315,7 +315,7 @@ following fields. (for Qdrant the ids are optional)
 ```bash
 # in order to work below examples expects a running Qdrant or Chroma Vector DB
 
-# start embedder node, default to using Qdrant Vector DB
+# start embedder node, by default use Qdrant Vector DB
 ros2 run rosgpt4all embed
 
 # start embedder node using Chroma Vector DB
