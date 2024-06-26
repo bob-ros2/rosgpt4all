@@ -21,7 +21,6 @@ from launch.actions import EmitEvent
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import TextSubstitution
-from launch.event_handlers import OnProcessStart
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch.conditions import IfCondition
@@ -40,11 +39,11 @@ def generate_launch_description():
     launch_ns = DeclareLaunchArgument('ns', 
         default_value=TextSubstitution(text='/gpt'))
 
-    # respawn node if exiting abnormal
+    # respawn nodes if exiting abnormal
     launch_respawn = DeclareLaunchArgument('respawn', 
         default_value="false")
 
-    # lanch with terminal
+    # launch with terminal
     launch_terminal = DeclareLaunchArgument('terminal', 
         default_value="false")
 
@@ -65,6 +64,7 @@ def generate_launch_description():
         package='rosgpt4all',
         executable='terminal',
         name='terminal',
+        respawn=LaunchConfiguration('respawn'),
         namespace=LaunchConfiguration('ns'),
         output='screen',
         parameters=[LaunchConfiguration('config_yaml')],
@@ -77,11 +77,7 @@ def generate_launch_description():
         launch_respawn,
         launch_terminal,
         gpt,
-        RegisterEventHandler(
-            OnProcessStart(
-                target_action=gpt, 
-                on_start=[terminal])
-        ),
+        terminal,
         RegisterEventHandler( # Shutdown if gpt ends
             OnProcessExit(
                 target_action=gpt,
