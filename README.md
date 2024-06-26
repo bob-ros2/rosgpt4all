@@ -321,13 +321,22 @@ following fields. (for Qdrant the ids are optional)
 # in order to work below examples expects a running Qdrant or Chroma Vector DB
 
 # start embedder node, by default use Qdrant Vector DB running on localhost
-ros2 run rosgpt4all embed
+ros2 run rosgpt4all embedder
 
 # start embedder node using Chroma Vector DB running on localhost
 EMBED_CHROMADB= ros2 run rosgpt4all embedder
 
 # run in debug mode, this will also set Python logging to level DEBUG
-ros2 run rosgpt4all embed --ros-args --log-level DEBUG
+ros2 run rosgpt4all embedder --ros-args --log-level DEBUG
+
+# this works without a Qdrant server
+ros2 run rosgpt4all embedder --ros-args -p path:=/home/ros/qdrant_data
+
+# this works without a Chroma server
+EMBED_CHROMADB= ros2 run rosgpt4all embedder --ros-args -p path:=/home/ros/chroma_data
+
+# publish from shell an embed order with a single item
+ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xyz\", \"documents\":[\"hey\"], \"metadatas\": [{\"name\":\"bob\"}]}"'
 ```
 
 ## Node Parameter
@@ -341,7 +350,7 @@ ros2 run rosgpt4all embed --ros-args --log-level DEBUG
   Host name or ip.\
   Default: 'localhost'
 
-> ~port\
+> ~port\/
   To be used port for the Vector DB API.\
   Default: (6333 or 8000, this depends from used Vector DB)
 

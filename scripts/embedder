@@ -20,6 +20,8 @@ import rclpy
 from rclpy.node import Node
 from rclpy.logging import LoggingSeverity
 from std_msgs.msg import String
+from sensor_msgs.msg import Image
+from message_filters import TimeSynchronizer, Subscriber
 from rcl_interfaces.msg import ParameterDescriptor
 
 # ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xxx\", \"documents\":[\"hey\"], \"metadatas\": [{\"name\":\"works\"}]}"'
@@ -86,13 +88,20 @@ class EmbedderNode(Node):
         # subscribe to embed topic
         self.sub = self.create_subscription(
             String, 'embed', self.embed_callback, 1000)
+        
+        #self.tss = TimeSynchronizer(Subscriber("/embed_image", sensor_msgs.msg.Image),
+        #   Subscriber("/embed_image_info", sensor_msgs.msg.CameraInfo))
+        #self.tss.registerCallback(self.gotimage)
+        #def gotimage(image, camerainfo):
+        #    assert image.header.stamp == camerainfo.header.stamp
+        #    print("got an Image and CameraInfo")
 
 
     def init_qdrant(self):
         """Init Qdrant embedder
         """
         from qdrant_embedder import QdrantEmbedder
-        self.get_logger().info('connect to Qdrant DB')
+        self.get_logger().info('using Qdrant DB')
         if self.location:
             return QdrantEmbedder(
                 self.model, prefer_grpc=True, location=self.location)
@@ -114,7 +123,7 @@ class EmbedderNode(Node):
         """Init Chroma embedder
         """
         from chroma_embedder import ChromaEmbedder
-        self.get_logger().info('connect to Chroma DB')
+        self.get_logger().info('using Chroma DB')
         if self.path:
             return ChromaEmbedder(
                 self.model, path=self.path)
