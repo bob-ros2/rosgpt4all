@@ -1,14 +1,12 @@
-/gpt/gpt:
+/**/gpt/gpt:
   ros__parameters:
     allow_download: true
     device: cpu
     eof_indicator: ''
     max_tokens: 500
-#    model_name: orca-mini-3b-gguf2-q4_0
+    model_name: orca-mini-3b-gguf2-q4_0
 #    model_name: gpt4all-13b-snoozy-q4_0
-#   model_name: mistral-7b-openorca.gguf2.Q4_0
-    model_name: mistral-7b-instruct-v0.1.Q4_0
-#    model_name: em_german_mistral_v01.Q4_0.gguf
+#    model_name: mistral-7b-instruct-v0.1.Q4_0
     model_path: /home/ros/.local/share/nomic.ai/GPT4All
     n_batch: 8
     repeat_last_n: 64
@@ -19,7 +17,7 @@
     top_p: 0.4
     prompt: "> {0}\n\n"
 
-/gpt/terminal:
+/**/gpt/terminal:
   ros__parameters:
     title: GPT4ALL Terminal
     display: -1
