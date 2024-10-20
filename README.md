@@ -368,7 +368,22 @@ ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xyz\",
 > ~embed (std_msgs/String)\
 Incoming JSON string with the embedding data.
 
-# Contributing
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.\
-Please make sure to update tests as appropriate.
+# ROS Node VECTOR
+With this Ros Node a vector db can be queried.
+
+## Subscribed Topics
+
+> ~query_in (std_msgs/String)\
+Incoming JSON query dictionary in followin format, \
+the field query_limit is optional:
+```code
+{
+  "query", "search text", 
+  "query_limit": 3
+}
+```
+
+## Published Topics
+
+> ~query_out (std_msgs/String)\
+Result of the last vector query.
