@@ -101,9 +101,9 @@ class RosNode(Node):
 
     def create_input_subscriptions(self, callback, callback_cr):
         self.sub1 = self.create_subscription(
-            String, 'input', callback, 10)
+            String, 'input', callback, 1000)
         self.sub2 = self.create_subscription(
-            String, 'input_cr', callback_cr, 10)
+            String, 'input_cr', callback_cr, 1000)
 
 # stdin thread class
 
@@ -244,8 +244,8 @@ class Window(QWidget):
     def mousePressEvent(self, event):
         """Mouse press callback. Handles also window moving without caption."""
         self.oldPosition = event.globalPos()
-        if event.button() == QtCore.Qt.RightButton:
-            self.close()
+        #if event.button() == QtCore.Qt.RightButton:
+        #    self.close()
 
     def mouseMoveEvent(self, event):
         """Mouse move callback. Handles also window moving without caption."""
