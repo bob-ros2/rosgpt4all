@@ -26,7 +26,7 @@
     frameless: false
     input: true
     geometry: [800, 350, 800, 400]
-    margin: [10, 0, 0, 0]
+    margin: [15, 0, 0, 0]
     opacity: 1.0
     stylesheet: 'background-color: black; color: #e8e8e8;'
-    stylesheet_window: 'background-color: black; color white;'
+    stylesheet_window: 'background-color: gray; color white;'

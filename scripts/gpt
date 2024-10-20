@@ -191,8 +191,9 @@ class GPTNode(Node):
             'repeat_last_n').get_parameter_value().integer_value
         self.n_batch = self.get_parameter(
             'n_batch').get_parameter_value().integer_value
-        self.n_threads = self.get_parameter(
-            'n_threads').get_parameter_value().integer_value
+        self.n_threads = (self.get_parameter(
+            'n_threads').get_parameter_value().integer_value)
+        self.n_threads = self.n_threads if self.n_threads > 0 else None
         self.ngl = self.get_parameter(
             'ngl').get_parameter_value().integer_value
         self.verbose = self.get_parameter(
