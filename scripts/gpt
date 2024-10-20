@@ -28,7 +28,9 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from rcl_interfaces.msg import SetParametersResult
 from rcl_interfaces.msg import ParameterDescriptor
-
+from rclpy.qos import QoSProfile
+from rclpy.qos import QoSReliabilityPolicy
+from rclpy.qos import QoSHistoryPolicy
 
 class GPTNode(Node):
     """
@@ -106,6 +108,12 @@ class GPTNode(Node):
         self.device = self.get_parameter(
             'device').get_parameter_value().string_value
 
+        self.declare_parameter('system_prompt', "Your name is 'Bob Ros'",
+            ParameterDescriptor(description=
+            'System promp to be used.'))
+        self.system_prompt = self.get_parameter(
+            'system_prompt').get_parameter_value().string_value
+
         self.declare_parameter('prompt', '> {0}\n\n', 
             ParameterDescriptor(description=
             'Promp format string to be used. E.g.: > {0}\\n\\n'))
@@ -151,6 +159,19 @@ class GPTNode(Node):
             'How far in the models generation history to apply the '
             'repeat penalty.'))
 
+        self.declare_parameter('n_threads', 0, 
+            ParameterDescriptor(description=
+            'Number of CPU threads used by GPT4All. Default is None, '
+            'then the number of threads are determined automatically.'))
+
+        self.declare_parameter('verbose', False, 
+            ParameterDescriptor(description=
+            'If True, print debug messages.'))
+        
+        self.declare_parameter('ngl', 0, 
+            ParameterDescriptor(description=
+            'Number of GPU layers to use (Vulkan).'))
+
         self.declare_parameter('n_batch', 8, 
             ParameterDescriptor(description=
             'Number of prompt tokens processed in parallel. Larger values '
@@ -170,8 +191,12 @@ class GPTNode(Node):
             'repeat_last_n').get_parameter_value().integer_value
         self.n_batch = self.get_parameter(
             'n_batch').get_parameter_value().integer_value
-        self.n_batch = self.get_parameter(
-            'n_batch').get_parameter_value().integer_value
+        self.n_threads = self.get_parameter(
+            'n_threads').get_parameter_value().integer_value
+        self.ngl = self.get_parameter(
+            'ngl').get_parameter_value().integer_value
+        self.verbose = self.get_parameter(
+            'verbose').get_parameter_value().bool_value
 
         # end gpt4all parameter generator
  
@@ -180,24 +205,33 @@ class GPTNode(Node):
 
         self.sub = self.create_subscription(
             String, 'gpt_in', 
-            self.topic_callback, 10)
+            self.topic_callback, 1000)
 
-        self.pub = self.create_publisher(
-            String, 'gpt_out', 10)
+        qos_profile = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            history=QoSHistoryPolicy.KEEP_ALL,
+            depth=1000)
 
         self.pub_generator = self.create_publisher(
-            String, 'gpt_generator', 10)
+            String, 'gpt_generator', qos_profile)
+
+        self.pub = self.create_publisher(
+            String, 'gpt_out', 1000)
 
         self.pub_sentence = self.create_publisher(
-            String, 'gpt_sentence', 10)
+            String, 'gpt_sentence', 1000)
 
         self.sentence = ''
 
         self.model = GPT4All(
-            model_name = self.model_name,
-            model_path = self.model_path,
+            model_name     = self.model_name,
+            model_path     = self.model_path,
             allow_download = self.allow_download,
-            device = self.device)
+            device         = self.device,
+            n_threads      = self.n_threads,
+            ngl            = self.ngl,
+            verbose        = self.verbose
+            )
 
         self.session_thread = Thread(target=self.session)
         self.sock_thread = Thread(target=self.socket_server)
@@ -268,7 +302,7 @@ class GPTNode(Node):
         Process incoming queue messages by GPT4ALL.
         """
 
-        with self.model.chat_session("Hello I'm Bob!"):
+        with self.model.chat_session(self.system_prompt):
             while self.running:
                 time.sleep(0.1)
                 if len(self.queue):

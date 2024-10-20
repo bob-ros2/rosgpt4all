@@ -15,16 +15,17 @@
 # limitations under the License.
 #
 
-import os, json, logging, traceback
+import os
+import json
+import logging
+import traceback
 import rclpy
 from rclpy.node import Node
 from rclpy.logging import LoggingSeverity
 from std_msgs.msg import String
-from sensor_msgs.msg import Image
-from message_filters import TimeSynchronizer, Subscriber
 from rcl_interfaces.msg import ParameterDescriptor
 
-# ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xxx\", \"documents\":[\"hey\"], \"metadatas\": [{\"name\":\"works\"}]}"'
+# ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xyz\", \"documents\":[\"hey\"], \"metadatas\": [{\"name\":\"hans\"}]}"'
 
 class EmbedderNode(Node):
     """Basic Embedder ROS Node.
@@ -88,15 +89,12 @@ class EmbedderNode(Node):
         # subscribe to embed topic
         self.sub = self.create_subscription(
             String, 'embed', self.embed_callback, 1000)
+        # subscribe to embed_raw topic
+        self.sub_raw = self.create_subscription(
+            String, 'embed_raw', self.embed_raw_callback, 1000)
+
+        self.get_logger().info('Init done, waiting for embed messages')
         
-        #self.tss = TimeSynchronizer(Subscriber("/embed_image", sensor_msgs.msg.Image),
-        #   Subscriber("/embed_image_info", sensor_msgs.msg.CameraInfo))
-        #self.tss.registerCallback(self.gotimage)
-        #def gotimage(image, camerainfo):
-        #    assert image.header.stamp == camerainfo.header.stamp
-        #    print("got an Image and CameraInfo")
-
-
     def init_qdrant(self):
         """Init Qdrant embedder
         """
@@ -118,7 +116,6 @@ class EmbedderNode(Node):
             return QdrantEmbedder(
                 self.model, prefer_grpc=True)
 
-
     def init_chroma(self):
         """Init Chroma embedder
         """
@@ -137,19 +134,51 @@ class EmbedderNode(Node):
             return QdrantEmbedder(
                 self.model)
 
-
     def embed_callback(self, msg: String) -> None:
         """Embeds the incoming JSON topic message into the Vector DB.
         Prints the incoming message also to the debug log.
         If it fails an error log entry will be written.
         """
         try:
+            self.get_logger().info("embedding data")
             self.embed(msg.data)
             self.get_logger().debug(
                 f'embed_callback: {msg.data}')
         except Exception as e: 
             self.get_logger().error(
                 f'embed_callback: {traceback.format_exc()}')
+
+    def embed_raw_callback(self, msg: String) -> None:
+        """Embeds raw data of any type into default collection 'embed_raw'.
+        To use another collection set the env var EMBED_COLLECTION accordingly.
+        If the collection comes with the input data that will be used instead.
+        """
+        embed_msg = {}
+        try:
+            data = json.loads(msg.data)
+            if  'collection' in data \
+                and 'documents' in data \
+                and 'metadatas' in data:
+                self.embed_callback(msg)
+            elif isinstance(data, dict):
+                embed_msg['collection'] = (data['collection'] 
+                    if 'collection' in data else os.getenv(
+                        'EMBED_COLLECTION', 'embed_raw'))
+                embed_msg['documents'] = (data['documents'] 
+                    if 'documents' in data else [(data['data']
+                        if 'data' in data else json.dumps(data))])
+                embed_msg['metadatas'] = [data]
+                if 'ids' in data:
+                    embed_msg['ids'] = data['ids'] 
+                self.embed_callback(
+                    String(data=json.dumps(embed_msg)))
+            else: raise Exception('none')
+        except:
+            embed_msg['collection'] = os.getenv(
+                'EMBED_COLLECTION', 'embed_raw')
+            embed_msg['documents'] = [msg.data]
+            embed_msg['metadatas'] = [{'data': msg.data}]
+            self.embed_callback(json.dumps(embed_msg))
 
 
 def main():
