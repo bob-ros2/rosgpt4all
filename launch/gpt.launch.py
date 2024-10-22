@@ -19,6 +19,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import RegisterEventHandler
 from launch.actions import EmitEvent
 from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import TextSubstitution
 from launch.substitutions import FindExecutable
@@ -77,7 +78,7 @@ def generate_launch_description():
         cmd=[[
             FindExecutable(name='rqt')
         ]],
-        shell=True
+        shell=False
     )
 
     return LaunchDescription([
