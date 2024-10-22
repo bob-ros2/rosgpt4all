@@ -21,6 +21,7 @@ from launch.actions import EmitEvent
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import TextSubstitution
+from launch.substitutions import FindExecutable
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch.conditions import IfCondition
@@ -71,6 +72,14 @@ def generate_launch_description():
         remappings=[('input', 'gpt_generator')]
     )
 
+    rqt_gui = ExecuteProcess(
+        condition=IfCondition(LaunchConfiguration("terminal")),
+        cmd=[[
+            FindExecutable(name='rqt')
+        ]],
+        shell=True
+    )
+
     return LaunchDescription([
         launch_config_yaml,
         launch_ns,
@@ -78,6 +87,7 @@ def generate_launch_description():
         launch_terminal,
         gpt,
         terminal,
+        rqt_gui,
         RegisterEventHandler( # Shutdown if gpt ends
             OnProcessExit(
                 target_action=gpt,
