@@ -50,15 +50,16 @@ class GPTNode(Node):
         # model related parameter
 
         self.declare_parameter('model_name', 
-            'gpt4all-13b-snoozy-q4_0', 
-            #'orca-mini-3b-gguf2-q4_0',
+            #'gpt4all-13b-snoozy-q4_0', 
+            'orca-mini-3b-gguf2-q4_0',
             ParameterDescriptor(description=
             'GPT4ALL model to be used.'))
         self.model_name = self.get_parameter(
             'model_name').get_parameter_value().string_value 
 
         self.declare_parameter('model_path', 
-            os.path.expanduser('~') + '/.local/share/nomic.ai/GPT4All', 
+            os.path.expanduser('~') + \
+                '/.local/share/nomic.ai/GPT4All', 
             ParameterDescriptor(description=
             'GPT4ALL model path to be used.'))
         self.model_path = self.get_parameter(
@@ -108,7 +109,10 @@ class GPTNode(Node):
         self.device = self.get_parameter(
             'device').get_parameter_value().string_value
 
-        self.declare_parameter('system_prompt', "Your name is 'Bob Ros'",
+        self.declare_parameter('system_prompt', 
+            "You are a helpful assistant with the name BobRos using model " + \
+                self.get_parameter(
+                    'model_name').get_parameter_value().string_value,
             ParameterDescriptor(description=
             'System promp to be used.'))
         self.system_prompt = self.get_parameter(
