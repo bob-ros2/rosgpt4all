@@ -8,7 +8,7 @@
 #    model_name: gpt4all-13b-snoozy-q4_0
 #    model_name: mistral-7b-instruct-v0.1.Q4_0
     model_path: /home/ros/.local/share/nomic.ai/GPT4All
-    system_prompt: 'You are a helpful assistant with the name BobRos'
+#    system_prompt: 'You are a helpful assistant with the name BobRos'
     n_batch: 8
     repeat_last_n: 64
     repeat_penalty: 1.18
