@@ -8,6 +8,7 @@
 #    model_name: gpt4all-13b-snoozy-q4_0
 #    model_name: mistral-7b-instruct-v0.1.Q4_0
     model_path: /home/ros/.local/share/nomic.ai/GPT4All
+    system_prompt: 'You are a helpful assistant with the name BobRos'
     n_batch: 8
     repeat_last_n: 64
     repeat_penalty: 1.18
@@ -19,7 +20,7 @@
 
 /**/gpt/terminal:
   ros__parameters:
-    title: GPT4ALL Terminal
+    title: ROS GPT4ALL Terminal
     display: -1
     fontname: 'Monospace'
     fontsize: 14
@@ -29,4 +30,4 @@
     margin: [15, 0, 0, 0]
     opacity: 1.0
     stylesheet: 'background-color: black; color: #e8e8e8;'
-    stylesheet_window: 'background-color: gray; color white;'
+    stylesheet_window: 'background-color: silver; color white;'

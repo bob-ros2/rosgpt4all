@@ -236,13 +236,14 @@ class GPTNode(Node):
             n_threads      = self.n_threads,
             ngl            = self.ngl,
             verbose        = self.verbose
-            )
+        )
 
         self.session_thread = Thread(target=self.session)
         self.sock_thread = Thread(target=self.socket_server)
 
         self.session_thread.start()
         self.sock_thread.start()
+        self.get_logger().info('init done')
 
 
     def gpt_callback(self, token_id: int, response: str):
