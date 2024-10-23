@@ -23,6 +23,7 @@ RUN chown $USER:$USER /home/$USER/entrypoint.sh \
 
 USER $USER
 ENV USER=$USER
+ENV WORKSPACE=$WORKSPACE
 ENV XDG_RUNTIME_DIR=/tmp/runtime-ros
 WORKDIR /home/$USER
 
