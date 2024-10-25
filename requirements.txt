@@ -1,8 +1,8 @@
-gpt4all==2.2.1.post1
+gpt4all==2.6.0
 # in case using qdrant
-qdrant-client==1.7.3
-fastembed==0.1.1
+qdrant-client>=1.8.0
+fastembed>=0.3.4
 # in case using chroma
-chromadb==0.4.23
-sentence-transformers==2.5.1
-transformers==4.38.2
+chromadb>=0.4.23
+sentence-transformers>=2.5.1
+transformers>=4.38.2
