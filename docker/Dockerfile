@@ -13,7 +13,7 @@ RUN groupadd -g $GID $USER \
     && usermod -a -G audio $USER
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    git python3-pip 
+    git vim python3-pip
 
 RUN echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
@@ -32,15 +32,15 @@ RUN mkdir -p /home/$USER/$WORKSPACE/src \
   && mkdir -p /home/$USER/.local/share/nomic.ai/GPT4All \
   && cd /home/$USER/$WORKSPACE/src \
   && git clone https://gitlab.com/bob-ros2/rosgpt4all.git \
-  #&& pip3 install --no-cache-dir -r ~/$WORKSPACE/src/rosgpt4all/requirements.txt 
+  #&& pip3 install --no-cache-dir -r ~/$WORKSPACE/src/rosgpt4all/requirements.txt \
   && pip3 install --no-cache-dir gpt4all==2.6.0
 
 # build package(s)
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
-  && cd /home/$USER/$WORKSPACE && colcon build 
+  && cd /home/$USER/$WORKSPACE && colcon build
 
 # set .bashrc
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/$USER/.bashrc \
-  && echo "source /home/$USER/$WORKSPACE/install/setup.bash" >> /home/$USER/.bashrc
+  && echo "source /home/$USER/$WORKSPACE/install/setup.bash" >> /home/$USER/.bashrc 
 
 ENTRYPOINT ["/home/ros/entrypoint.sh"]

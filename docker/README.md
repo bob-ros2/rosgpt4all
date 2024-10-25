@@ -1,6 +1,6 @@
 # ROS GPT4ALL Dockerfile
 
-this Dockerfile integrates GPT4ALL into ROS (Robot Operating System)
+this Dockerfile integrates GPT4ALL into a ROS (Robot Operating System) environment
 
 Related links:
 - https://github.com/nomic-ai/gpt4all
@@ -9,7 +9,7 @@ Related links:
 
 ```bash
 # build the docker image in the docker folder
-$ sudo docker build --no-cache -t gpt4all-ros-humble:0.1.0 .
+$ sudo docker build --no-cache -t gpt4all-ros:latest-humble .
 
 # start rosgpt4all directly with the container
 # starts additionaly a terminal to interact with the gpt and the ROS rqt GUI
@@ -18,18 +18,27 @@ $ sudo docker build --no-cache -t gpt4all-ros-humble:0.1.0 .
 # if no existing model is configured a small default model will be dowloaded
 sudo docker run -it --net=host \
     -e DISPLAY=$DISPLAY \
+    -e ROS_DOMAIN_ID=100 \
     -v ~/.local/share/nomic.ai/GPT4All:/home/ros/.local/share/nomic.ai/GPT4All \
-    ros2 launch rosgpt4all gpt.launch.py terminal:=true
+    gpt4all-ros:latest-humble ros2 launch rosgpt4all gpt.launch.py terminal:=true
 
 # run container as ROS dev environment
 $ sudo docker run -it --net=host \
     -e DISPLAY=$DISPLAY \
     -v ~/.local/share/nomic.ai/GPT4All:/home/ros/.local/share/nomic.ai/GPT4All \
-    gpt4all-ros-humble:0.1.0 bash
+    gpt4all-ros:latest-humble bash
 
 # in the container run gpt4all via launch file
 $ ros2 launch rosgpt4all gpt.launch.py terminal:=true
 
 # set another namespace
 ros2 launch rosgpt4all gpt.launch.py terminal:=true ns:=/bob/gpt
+```
+
+```bash
+# connect whisper
+sudo docker run -it --net=host \
+    -v /run/user/1000/pulse/native:/run/user/1000/pulse/native \
+    -e PULSE_SERVER=unix:/run/user/1000/pulse/native \
+    gpt4all-ros:latest-humble bash
 ```
