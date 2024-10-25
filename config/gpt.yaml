@@ -1,24 +1,24 @@
-/**/gpt/gpt:
+/**/gpt*/gpt:
   ros__parameters:
-    allow_download: true
-    device: cpu
-    eof_indicator: ''
-    max_tokens: 500
-    model_name: orca-mini-3b-gguf2-q4_0
+#    model_name: orca-mini-3b-gguf2-q4_0
 #    model_name: gpt4all-13b-snoozy-q4_0
-#    model_name: mistral-7b-instruct-v0.1.Q4_0
+    model_name: mistral-7b-instruct-v0.1.Q4_0
     model_path: /home/ros/.local/share/nomic.ai/GPT4All
 #    system_prompt: 'You are a helpful assistant with the name BobRos'
+    device: cpu
+    allow_download: true
+    max_tokens: 500
+    prompt: "> {0}\n\n"
     n_batch: 8
     repeat_last_n: 64
     repeat_penalty: 1.18
-    socket_path: /tmp/gpt.sock
     temp: 0.7
     top_k: 40
     top_p: 0.4
-    prompt: "> {0}\n\n"
+    eof_indicator: ''
+    socket_path: /tmp/gpt.sock
 
-/**/gpt/terminal:
+/**/gpt*/terminal:
   ros__parameters:
     title: ROS GPT4ALL Terminal
     display: -1
@@ -30,4 +30,4 @@
     margin: [15, 0, 0, 0]
     opacity: 1.0
     stylesheet: 'background-color: black; color: #e8e8e8;'
-    stylesheet_window: 'background-color: silver; color white;'
+    stylesheet_window: 'background-color: gray; color white;'
