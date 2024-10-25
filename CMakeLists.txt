@@ -18,7 +18,7 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install launch ajnd config files.
+# Install launch and config files.
 install(DIRECTORY
   launch
   config
