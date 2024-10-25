@@ -1,4 +1,4 @@
-/**/gpt*/gpt:
+/**/gpt4all/gpt:
   ros__parameters:
 #    model_name: orca-mini-3b-gguf2-q4_0
 #    model_name: gpt4all-13b-snoozy-q4_0
@@ -18,7 +18,7 @@
     eof_indicator: ''
     socket_path: /tmp/gpt.sock
 
-/**/gpt*/terminal:
+/**/gpt4all/terminal:
   ros__parameters:
     title: ROS GPT4ALL Terminal
     display: -1
