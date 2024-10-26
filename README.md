@@ -19,6 +19,7 @@ Related links:
 <!-- https://ecotrust-canada.github.io/markdown-toc/ -->
 - [ROS Package RosGPT4all](#ros-package-rosgpt4all)
   * [Index](#index)
+  * [Docker Support](#docker-support)
   * [Dependencies](#dependencies)
   * [Setup package](#setup-package)
 - [ROS Node GPT](#ros-node-gpt)
@@ -42,6 +43,12 @@ Related links:
   * [Subscribed Topics](#subscribed-topics-3)
   * [Published Topics](#published-topics-2)
 - [Contributing](#contributing)
+
+
+## Docker Support
+This ROS package is also as a pre build docker image available.\
+See below how to use it
+* [rosgpt4all/docker](https://github.com/bob-ros2/rosgpt4all/tree/main/docker)
 
 ## Dependencies
 ```bash

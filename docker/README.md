@@ -34,11 +34,7 @@ $ ros2 launch rosgpt4all gpt.launch.py terminal:=true
 # set another namespace
 ros2 launch rosgpt4all gpt.launch.py terminal:=true ns:=/bob/gpt
 ```
+## Pre Build Docker Image
+There is also a pre build image available here
 
-```bash
-# connect whisper
-sudo docker run -it --net=host \
-    -v /run/user/1000/pulse/native:/run/user/1000/pulse/native \
-    -e PULSE_SERVER=unix:/run/user/1000/pulse/native \
-    gpt4all-ros:latest-humble bash
-```
+* https://ghcr.io/bob-ros2/gpt4all-ros
