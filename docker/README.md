@@ -35,10 +35,10 @@ $ ros2 launch rosgpt4all gpt.launch.py terminal:=true
 ros2 launch rosgpt4all gpt.launch.py terminal:=true ns:=/bob/gpt
 ```
 
-> **Running under Windows**\
-> This works as well with Docker Desktop under Windows. It's highly recommeneded to use a more modern X-Server like [VcXsrv Windows X Server](https://sourceforge.net/projects/vcxsrv/) than the standard Xming because it got no updates for a couple of years.\
+> **Running under Windows using X-Server**\
+> This works as well with Docker Desktop under Windows. It's highly recommeneded to use a more modern X-Server like [VcXsrv Windows X Server](https://sourceforge.net/projects/vcxsrv/) than the standard Xming because it got no updates for a couple of years and some features are not working which are needed by e.g. the ROS `rqt` GUI.\
 When starting the X-Server with `Xlaunch` choose `Multiple Windows`, `Disable access control` and set `Display number` to 0.\
-Use `-v DISPLAY=<ip>:0.0` instead of `localhost:0.0` otherwise it does not reach the host.
+Use `-v DISPLAY=<host-ip>:0.0` instead of `localhost:0.0` otherwise it does not reach the host.
 
 ## Pre Build Docker Image
 There is also a pre build image available. Replace the image name with this one in order to use it.
