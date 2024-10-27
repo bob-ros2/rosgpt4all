@@ -37,7 +37,7 @@ ros2 launch rosgpt4all gpt.launch.py terminal:=true ns:=/bob/gpt
 ## Pre Build Docker Image
 There is also a pre build image available. Replace the image name with this one in order to use it.
 
-> ghcr.io/bob-ros2/bob-whisper-ros:latest-humble
+> ghcr.io/bob-ros2/gpt4all-ros:latest-humble
 
 Package path
 - https://ghcr.io/bob-ros2/gpt4all-ros
