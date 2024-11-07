@@ -77,9 +77,9 @@ colcon build
 . install/setup.bash
 ```
 
-# ROS Node GPT
+## ROS Node GPT
 
-## Usage
+### Usage
 ```bash
 # run as server ROS node
 ros2 run rosgpt4all gpt.py
@@ -90,7 +90,7 @@ ros2 run rosgpt4all gpt.py --ros-args -r gpt_out:=/speak
 # send message to gpt4all via command line
 ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
 ```
-## Node Parameter
+### Node Parameter
 
 > ~allow_download\
   Type: string\
@@ -173,12 +173,12 @@ ros2 topic pub --once /gpt_in std_msgs/msg/String "{data: 'Hello'}"
   probabilities add up to top_p.\
   Default: 0.4
 
-## Subscribed Topics
+### Subscribed Topics
 
 > ~gpt_in (std_msgs/String)\
 GPT input.
 
-## Published Topics
+### Published Topics
 
 > ~gpt_out (std_msgs/String)\
 GPT ouput. The whole message will be published when the generator has finished.
@@ -190,7 +190,7 @@ GPT generator ouput. Each single token is published to the topic.
 GPT ouput aggregated as sentence or sub sentence. A message with content EOF indicates the end.
 of the generator output.
 
-## Socket stream
+### Socket stream
 The GPT node also creates a socket where the generator output will be streamed 
 in realtime. Multiple clients can connect.
 ```bash
@@ -198,17 +198,17 @@ in realtime. Multiple clients can connect.
 netcat -v -U /tmp/gpt.sock 
 ```
 
-# ROS Node TERMINAL
+## ROS Node TERMINAL
 With this Ros Node the generator output of GPT4ALL node can be received and displayed in realtime. This works as well with any other stdout stream. Also a topic input subscriber is available. An input field can optionally be turned on which can be used to publish messages to another topic.
 
-## Dependencies
+### Dependencies
 The required QT5 libraries should already exist if ROS is installed. If 
 missing use below installation to get them.
 ```bash
 sudo apt-get install python3-pyqt5
 ```
 
-## Usage
+### Usage
 ```bash
 # connect terminal with GPT node socket stream, use one of the existing QT5 arguments
 netcat -v -U /tmp/gpt.sock | python3 terminal.py -qwindowgeometry 640x480+600+300
@@ -220,7 +220,7 @@ netcat -v -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p frame
 netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:=1 -p geometry:=[300,300,600,480]
 ```
 
-## Node Parameter
+### Node Parameter
 
 > ~display\
   Type: integer\
@@ -277,17 +277,17 @@ netcat -U /tmp/gpt.sock | ros2 run rosgpt4all terminal.py --ros-args -p display:
   If the number exceeds the lines are removed from the top.
   Default: 0
 
-## Subscribed Topics
+### Subscribed Topics
 
 > ~input (std_msgs/String)\
 Read input data from topic in addition to be able to read data from stdin.
 
-## Published Topics
+### Published Topics
 
 > ~gpt_in (std_msgs/String)\
 Publish to GPT4ALL input.
 
-# ROS Node EMBEDDER
+## ROS Node EMBEDDER
 
 Basic Embedder ROS Node.
 This ROS node subscribes to an /embed String topic to receive JSON data with 
@@ -312,7 +312,7 @@ Related Chroma links:
 By default Sentence Transformers `all-MiniLM-L6-v2` model will be use to 
 create embeddings for Chroma.
 
-## Embedding data format
+### Embedding data format
 
 The JSON data which is received by the String topic has to contain the 
 following fields. (for Qdrant the ids are optional) 
@@ -326,7 +326,7 @@ following fields. (for Qdrant the ids are optional)
 }
 ```
 
-## Usage
+### Usage
 ```bash
 # in order to work below examples expects a running Qdrant or Chroma Vector DB
 
@@ -349,7 +349,7 @@ EMBED_CHROMADB= ros2 run rosgpt4all embedder --ros-args -p path:=/home/ros/chrom
 ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xyz\", \"documents\":[\"hey\"], \"metadatas\": [{\"name\":\"bob\"}]}"'
 ```
 
-## Node Parameter
+### Node Parameter
 
 > ~model\
   Modelname to be used to produce the embedding.
@@ -373,27 +373,7 @@ ros2 topic pub --once embed std_msgs/msg/String 'data: "{\"collection\":\"xyz\",
   Path where to store the Vector DB data.\
   Default: ''
 
-## Subscribed Topics
+### Subscribed Topics
 
 > ~embed (std_msgs/String)\
 Incoming JSON string with the embedding data.
-
-# ROS Node VECTOR
-With this Ros Node a vector db can be queried.
-
-## Subscribed Topics
-
-> ~query_in (std_msgs/String)\
-Incoming JSON query dictionary in following format, \
-the field query_limit is optional:
-```code
-{
-  "query", "search text", 
-  "query_limit": 3
-}
-```
-
-## Published Topics
-
-> ~query_out (std_msgs/String)\
-Result of the last vector query.
