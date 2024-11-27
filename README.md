@@ -39,9 +39,6 @@ Related links:
   * [Usage](#usage-2)
   * [Node Parameter](#node-parameter-2)
   * [Subscribed Topics](#subscribed-topics-2)
-- [ROS Node VECTOR](#ros-node-vector)
-  * [Subscribed Topics](#subscribed-topics-3)
-  * [Published Topics](#published-topics-2)
 - [Contributing](#contributing)
 
 
