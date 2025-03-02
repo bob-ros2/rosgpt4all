@@ -1,4 +1,4 @@
-# ROS Package RosGPT4all
+# ROS Package RosGPT4all [rosgpt4all](https://github.com/bob-ros2/rosgpt4all)
 
 This package contains [ROS](https://ros.org) Nodes related to the open source 
 project [GPT4ALL](https://github.com/nomic-ai/gpt4all).
