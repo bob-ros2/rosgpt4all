@@ -1,6 +1,6 @@
 # ROS Package [RosGPT4all](https://github.com/bob-ros2/rosgpt4all)
 
-> **This repository is at the end of its life because gpt4all library is not continued**
+> **!!! This repository is at the end of its life because gpt4all library is not continued !!!**
 
 This package contains [ROS](https://ros.org) Nodes related to the open source 
 project [GPT4ALL](https://github.com/nomic-ai/gpt4all).
